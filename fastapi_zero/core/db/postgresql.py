@@ -5,7 +5,7 @@ from sqlalchemy.ext.asyncio import (
 )
 
 from fastapi_zero.core import Settings
-from fastapi_zero.db import BaseDB
+from fastapi_zero.core.db import BaseDB
 
 
 class PostgresDB(BaseDB):

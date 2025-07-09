@@ -1,5 +1,5 @@
-from sqlalchemy import Column, Integer, String
-from sqlalchemy.orm import Mapped
+from sqlalchemy import String
+from sqlalchemy.orm import Mapped, mapped_column
 
 from fastapi_zero.core import BaseModel
 
@@ -7,6 +7,5 @@ from fastapi_zero.core import BaseModel
 class User(BaseModel):
     __tablename__ = 'users'
 
-    id: Mapped[int] = Column(Integer, primary_key=True, autoincrement=True)
-    email: Mapped[str] = Column(String, unique=True, index=True)
-    name: Mapped[str] = Column(String)
+    email: Mapped[str] = mapped_column(String(50), unique=True, index=True)
+    name: Mapped[str] = mapped_column(String(50), nullable=True)
