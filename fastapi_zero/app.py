@@ -1,7 +1,7 @@
 from fastapi import FastAPI
 
+from fastapi_zero.core import Settings
 from fastapi_zero.routes import router
-from fastapi_zero.settings.settings import Settings
 
 
 class App(FastAPI):

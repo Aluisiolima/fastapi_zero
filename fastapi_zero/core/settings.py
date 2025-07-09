@@ -7,6 +7,7 @@ class Settings(BaseSettings):
     VERSION: str = '0.1.0'
     DESCRIPTION: str = 'A minimal FastAPI application with zero dependencies.'
     ROOT_PATH: str = '/api/v1'
+    IS_PRODUCTION: bool
 
     class Config:
         env_file = '.env'
