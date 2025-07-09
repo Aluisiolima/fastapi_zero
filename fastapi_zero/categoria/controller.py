@@ -1,8 +1,9 @@
-from fastapi import APIRouter, HTTPException
 from http import HTTPStatus
+
+from fastapi import APIRouter
 
 router = APIRouter()
 
-@router.get("/", status_code=HTTPStatus.OK)
-async def get_categoria():
-    ...
+
+@router.get('/', status_code=HTTPStatus.OK)
+async def get_categoria(): ...

@@ -1,11 +1,11 @@
-from fastapi import APIRouter, HTTPException
+from fastapi import APIRouter
 
 router = APIRouter()
 
-@router.get("/login")
-async def login(username: str, password: str):
-    ...
 
-@router.post("/register")
-async def register(user: dict):
-    ... 
+@router.get('/login')
+async def login(username: str, password: str): ...
+
+
+@router.post('/register')
+async def register(user: dict): ...
