@@ -1,7 +1,20 @@
-from fastapi import APIRouter, HTTPException
+from fastapi import APIRouter
+from http import HTTPStatus
 
 router = APIRouter()
 
-@router.get("/{pedido_id}")
-async def get_pedido(pedido_id: int):
-    return {"pedido_id": pedido_id, "items": []}
+@router.post("/", status_code=HTTPStatus.CREATED)
+async def create_pedido(pedido: dict):
+    ...
+
+@router.get("/{pedido_id}", status_code=HTTPStatus.OK)
+async def get_pedido_by_id(pedido_id: int):
+    ...
+
+@router.get("/", status_code=HTTPStatus.OK)
+async def get_pedidos():
+    ...
+
+@router.delete("/{pedido_id}/cancel", status_code=HTTPStatus.NO_CONTENT)
+async def cancel_pedido(pedido_id: int):
+    ...

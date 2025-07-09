@@ -1,7 +1,20 @@
 from fastapi import APIRouter, HTTPException
+from http import HTTPStatus
 
 router = APIRouter()
 
-@router.get("/{cart_id}")
+@router.get("/", status_code=HTTPStatus.OK)
 async def get_cart(cart_id: int):
-    return {"cart_id": cart_id, "items": []}
+    ...
+
+@router.post("/items", status_code=HTTPStatus.CREATED)
+async def create_cart(cart: dict):
+    ...
+
+@router.put("/items/{cart_id}", status_code=HTTPStatus.NO_CONTENT)
+async def update_cart(cart_id: int, cart: dict):
+    ...
+
+@router.delete("/items/{cart_id}", status_code=HTTPStatus.NO_CONTENT)
+async def delete_cart(cart_id: int):
+    ...

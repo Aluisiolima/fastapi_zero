@@ -1,7 +1,20 @@
-from fastapi import APIRouter,  HTTPException
+from fastapi import APIRouter
+from http import HTTPStatus
 
 router = APIRouter()
 
-@router.get("/{user_id}")
-async def get_user(user_id: int):
-    return {"user_id": user_id, "name": "John Doe"}
+@router.get("/me", status_code=HTTPStatus.OK)
+async def get_user():
+    ...
+
+@router.put("/me", status_code=HTTPStatus.NO_CONTENT)
+async def update_user(user: dict):
+    ...
+
+@router.get("/me/addresses", status_code=HTTPStatus.OK)
+async def get_user_addresses():
+    ...
+
+@router.post("/me/addresses", status_code=HTTPStatus.CREATED)
+async def create_user_address(address: dict):
+    ...
