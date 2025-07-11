@@ -31,7 +31,7 @@ services:
     expose:
       - 5432
     healthcheck:
-      test: [ "CMD", "pg_isready" ]
+      test: [ "CMD", "pg_isready", "-U", "root", "-h", "db" ]
       interval: 10s
       timeout: 5s
       retries: 5
