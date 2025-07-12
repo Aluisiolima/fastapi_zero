@@ -5,3 +5,4 @@
 - `GET /users/me/addresses` - Listar endereços
 - `POST /users/me/addresses` - Adicionar endereço
 - `PUT /users/me/addresses/:id_address` - Editar endereço
+- `DELETE /users/me/addresses/:id_address` - Deleta endereço

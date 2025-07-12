@@ -22,26 +22,35 @@ db = PostgresDB()
 async def create_user(
     user: UserCreate, db: AsyncSession = Depends(db.get_session)
 ):
-    user = await UserService.create_user(user_create=user, db=db)
-    return user
+    return await UserService.create_user(user_create=user, db=db)
 
 
-@router.get('/me', status_code=HTTPStatus.OK, response_model=UserResponse)
-async def get_user(db: AsyncSession = Depends(db.get_session)): ...
+@router.get('/', status_code=HTTPStatus.OK, response_model=list[UserResponse])
+async def get_user(db: AsyncSession = Depends(db.get_session)):
+    return await UserService.list_user(db=db)
+
+
+@router.get('/me/{id}', status_code=HTTPStatus.OK, response_model=UserResponse)
+async def get_user_by_id(id: int, db: AsyncSession = Depends(db.get_session)):
+    return await UserService.get_user_by_id(id=id, db=db)
 
 
 @router.put('/me', status_code=HTTPStatus.NO_CONTENT)
 async def update_user(
     user: UserUpdate, db: AsyncSession = Depends(db.get_session)
-): ...
+):
+    await UserService.update_user(user_update=user, db=db)
 
 
 @router.get(
-    '/me/addresses',
+    '/me/addresses/{id}',
     status_code=HTTPStatus.OK,
     response_model=list[UserAddress],
 )
-async def get_user_addresses(db: AsyncSession = Depends(db.get_session)): ...
+async def get_user_addresses(
+    id: int, db: AsyncSession = Depends(db.get_session)
+):
+    return await UserService.get_user_address(id=id, db=db)
 
 
 @router.post(
@@ -49,7 +58,8 @@ async def get_user_addresses(db: AsyncSession = Depends(db.get_session)): ...
 )
 async def create_user_address(
     address: UserAddressCreate, db: AsyncSession = Depends(db.get_session)
-): ...
+):
+    return await UserService.create_address_user(address_create=address, db=db)
 
 
 @router.put('/me/addresses/{id_address}', status_code=HTTPStatus.NO_CONTENT)
@@ -57,4 +67,15 @@ async def update_user_address(
     id_address: int,
     address: UserAddressUpdate,
     db: AsyncSession = Depends(db.get_session),
-): ...
+):
+    await UserService.update_address(
+        id=id_address, address_update=address, db=db
+    )
+
+
+@router.delete('/me/addresses/{id_address}', status_code=HTTPStatus.NO_CONTENT)
+async def delete_user_address(
+    id_address: int,
+    db: AsyncSession = Depends(db.get_session),
+):
+    await UserService.delete_address(id=id_address, db=db)

@@ -28,10 +28,13 @@ RUN pip install poetry
 
 WORKDIR /app
 
-COPY . /app/
+COPY pyproject.toml poetry.lock* /app/
 
-RUN poetry config virtualenvs.create false \
-    && poetry install --no-interaction --no-ansi
+RUN poetry config virtualenvs.create false
+
+RUN poetry install --no-interaction --no-ansi
+
+COPY . /app/
 
 # Create a non-privileged user that the app will run under.
 # See https://docs.docker.com/go/dockerfile-user-best-practices/

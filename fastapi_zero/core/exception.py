@@ -12,7 +12,7 @@ class ExceptionMessages:
 
         if isinstance(exc, IntegrityError):
             raise HTTPException(
-                status_code=HTTPStatus.BAD_REQUEST,
+                status_code=HTTPStatus.CONFLICT,
                 detail='Violação de integridade, dados duplicados',
             )
         elif isinstance(exc, DataError):
