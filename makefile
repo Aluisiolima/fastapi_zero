@@ -1,4 +1,5 @@
 run:
+	alembic upgrade head
 	uvicorn fastapi_zero.app:app --reload --host 0.0.0.0
 
 test:

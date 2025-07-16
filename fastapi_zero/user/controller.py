@@ -3,7 +3,7 @@ from http import HTTPStatus
 from fastapi import APIRouter, Depends
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from fastapi_zero.core.db import PostgresDB
+from fastapi_zero.core.db import BaseDB, PostgresDB
 from fastapi_zero.user.schema import (
     UserAddress,
     UserAddressCreate,
@@ -15,7 +15,7 @@ from fastapi_zero.user.schema import (
 from fastapi_zero.user.service import UserService
 
 router = APIRouter()
-db = PostgresDB()
+db: BaseDB = PostgresDB()
 
 
 @router.post('/', status_code=HTTPStatus.CREATED, response_model=UserResponse)

@@ -1,4 +1,3 @@
-from datetime import UTC, datetime
 from http import HTTPStatus
 
 from fastapi import HTTPException
@@ -6,7 +5,7 @@ from sqlalchemy import and_, select
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from fastapi_zero.core import exceptions
-from fastapi_zero.user.model import Address, User
+from fastapi_zero.core.repository import Address, User
 from fastapi_zero.user.schema import (
     UserAddressCreate,
     UserAddressUpdate,
@@ -21,11 +20,7 @@ class UserService:
     async def create_user(
         *, user_create: UserCreate, db: AsyncSession
     ) -> User:
-        user = User(
-            **user_create.model_dump(),
-            created_at=datetime.now(UTC),
-            updated_at=datetime.now(UTC),
-        )
+        user = User(**user_create.model_dump())
         db.add(user)
         await db.commit()
         await db.refresh(user)
@@ -35,9 +30,9 @@ class UserService:
     @exceptions
     async def list_user(*, db: AsyncSession) -> list[User]:
         stmt = select(User)
-        user: list[User] = await db.scalars(stmt)
+        users: list[User] = await db.scalars(stmt)
 
-        return user
+        return users
 
     @staticmethod
     @exceptions
@@ -58,7 +53,6 @@ class UserService:
             )
 
         update_data = user_update.model_dump(exclude_unset=True)
-        update_data['updated_at'] = datetime.now(UTC)
 
         for key, value in update_data.items():
             setattr(user_exist, key, value)
@@ -96,11 +90,7 @@ class UserService:
                 detail='The address already exist',
             )
 
-        address = Address(
-            **address_create.model_dump(),
-            created_at=datetime.now(UTC),
-            updated_at=datetime.now(UTC),
-        )
+        address = Address(**address_create.model_dump())
 
         db.add(address)
         await db.commit()
@@ -120,7 +110,6 @@ class UserService:
             )
 
         update_data = address_update.model_dump(exclude_unset=True)
-        update_data['updated_at'] = datetime.now(UTC)
 
         for key, value in update_data.items():
             setattr(address_exist, key, value)

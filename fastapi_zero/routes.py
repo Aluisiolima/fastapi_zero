@@ -1,4 +1,4 @@
-from fastapi import routing
+from fastapi import APIRouter
 
 from fastapi_zero.auth.controller import router as auth_router
 from fastapi_zero.cart.controller import router as cart_router
@@ -7,7 +7,7 @@ from fastapi_zero.pedido.controller import router as pedido_router
 from fastapi_zero.produto.controller import router as produto_router
 from fastapi_zero.user.controller import router as user_router
 
-router = routing.APIRouter()
+router = APIRouter()
 
 router.include_router(user_router, prefix='/users', tags=['users'])
 router.include_router(produto_router, prefix='/products', tags=['produtos'])

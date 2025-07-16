@@ -9,7 +9,7 @@ class UserCreate(BaseModel):
     password: str = Field(
         ..., description="User's password", min_length=8, max_length=50
     )
-    contato: Optional[str] = Field(
+    contact: Optional[str] = Field(
         default=None, description="User's contact number", max_length=14
     )
 
@@ -20,7 +20,7 @@ class UserCreate(BaseModel):
                 'email': 'emailexemplas@gmail.com',
                 'name': 'John Doe',
                 'password': 'password123',
-                'contato': '12345678901',
+                'contact': '12345678901',
             }
         }
 
@@ -32,7 +32,7 @@ class UserUpdate(BaseModel):
     password: Optional[str] = Field(
         None, description="User's password", min_length=8, max_length=50
     )
-    contato: Optional[str] = Field(
+    contact: Optional[str] = Field(
         None, description="User's contact number", max_length=14
     )
 
@@ -43,7 +43,7 @@ class UserUpdate(BaseModel):
                 'email': 'emailexemplas@gmail.com',
                 'name': 'John Doe',
                 'password': 'password123',
-                'contato': '12345678901',
+                'contact': '12345678901',
             }
         }
 
@@ -52,7 +52,7 @@ class UserResponse(BaseModel):
     id: int
     email: EmailStr
     name: str
-    contato: Optional[str]
+    contact: Optional[str]
 
     class Config:
         from_attributes = True
@@ -61,7 +61,7 @@ class UserResponse(BaseModel):
                 'id': 1,
                 'email': 'emailexemplas@gmail.com',
                 'name': 'John Doe',
-                'contato': '12345678901',
+                'contact': '12345678901',
             }
         }
 
