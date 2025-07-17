@@ -32,7 +32,7 @@ class ExceptionMessages:
         else:
             raise HTTPException(
                 status_code=HTTPStatus.INTERNAL_SERVER_ERROR,
-                detail='Erro inesperado no banco de dados',
+                detail=f'{exc}',
             )
 
 

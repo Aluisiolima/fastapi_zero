@@ -58,7 +58,6 @@ class UserService:
             setattr(user_exist, key, value)
 
         await db.commit()
-        await db.refresh(user_exist)
 
     @staticmethod
     @exceptions
