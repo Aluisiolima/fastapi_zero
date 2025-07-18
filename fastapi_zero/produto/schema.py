@@ -37,9 +37,9 @@ class ProductUpdate(SchemaBase):
 
 
 class ProductResponse(SchemaBase):
-    id: int = Field(..., description='id product')
-    name: str = Field(..., description='name product')
-    price: Decimal = Field(..., description='price actual product')
-    description: str = Field(..., description='description of product')
-    discount: int = Field(..., description='discount applied in product')
-    stock: int = Field(..., description='stock of product')
+    id: int
+    name: str
+    price: Decimal
+    description: str
+    discount: int
+    stock: int
