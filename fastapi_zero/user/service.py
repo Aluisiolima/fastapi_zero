@@ -28,8 +28,10 @@ class UserService:
 
     @staticmethod
     @exceptions
-    async def list_user(*, db: AsyncSession) -> list[User]:
-        stmt = select(User)
+    async def list_user(
+        *, limit: int, offset: int, db: AsyncSession
+    ) -> list[User]:
+        stmt = select(User).offset(offset=offset).limit(limit=limit)
         users: list[User] = await db.scalars(stmt)
 
         return users

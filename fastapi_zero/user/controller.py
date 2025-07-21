@@ -1,6 +1,6 @@
 from http import HTTPStatus
 
-from fastapi import APIRouter, Depends
+from fastapi import APIRouter, Depends, Query
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from fastapi_zero.core.db import db
@@ -25,8 +25,12 @@ async def create_user(
 
 
 @router.get('/', status_code=HTTPStatus.OK, response_model=list[UserResponse])
-async def get_user(db: AsyncSession = Depends(db.get_session)):
-    return await UserService.list_user(db=db)
+async def get_user(
+    offset: int = Query(0, ge=0),
+    limit: int = Query(10, ge=1),
+    db: AsyncSession = Depends(db.get_session),
+):
+    return await UserService.list_user(limit=limit, offset=offset, db=db)
 
 
 @router.get('/me/{id}', status_code=HTTPStatus.OK, response_model=UserResponse)

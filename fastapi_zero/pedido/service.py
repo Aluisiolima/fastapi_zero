@@ -61,15 +61,18 @@ class OrderService:
 
     @staticmethod
     @exceptions
-    async def get_all_order(*, user_id: int, db: AsyncSession) -> list[Order]:
+    async def get_all_order(
+        *, user_id: int, limit: int, offset: int, db: AsyncSession
+    ) -> list[Order]:
         stmt = (
             select(Order)
             .options(selectinload(Order.order_items))
             .where(Order.user_id == user_id)
+            .offset(offset=offset)
+            .limit(limit=limit)
         )
 
-        result = await db.scalars(stmt)
-        orders: Order = result.all()
+        orders: Order = await db.scalars(stmt)
 
         return orders
 

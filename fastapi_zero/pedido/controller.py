@@ -1,6 +1,6 @@
 from http import HTTPStatus
 
-from fastapi import APIRouter, Depends
+from fastapi import APIRouter, Depends, Query
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from fastapi_zero.core.db import db
@@ -32,9 +32,14 @@ async def get_pedido_by_id(
     response_model=list[OrderResponse],
 )
 async def get_pedidos(
-    user_id: int, db: AsyncSession = Depends(db.get_session)
+    user_id: int,
+    limit: int = Query(10, ge=1),
+    offset: int = Query(0, ge=0),
+    db: AsyncSession = Depends(db.get_session),
 ):
-    return await OrderService.get_all_order(user_id=user_id, db=db)
+    return await OrderService.get_all_order(
+        user_id=user_id, limit=limit, offset=offset, db=db
+    )
 
 
 @router.delete('/{pedido_id}/cancel', status_code=HTTPStatus.NO_CONTENT)
