@@ -17,7 +17,9 @@ from fastapi_zero.user.service import UserService
 router = APIRouter()
 
 
-@router.post('/', status_code=HTTPStatus.CREATED, response_model=UserResponse)
+@router.post(
+    '/register', status_code=HTTPStatus.CREATED, response_model=UserResponse
+)
 async def create_user(
     user: UserCreate, db: AsyncSession = Depends(db.get_session)
 ):

@@ -8,6 +8,9 @@ class Settings(BaseSettings):
     DESCRIPTION: str = 'A minimal FastAPI application with zero dependencies.'
     ROOT_PATH: str = '/api/v1'
     IS_PRODUCTION: bool
+    SECRET_KEY: str
+    ALGORITHM: str = 'HS256'
+    EXPIRE: int = 1
 
     class Config:
         env_file = '.env'

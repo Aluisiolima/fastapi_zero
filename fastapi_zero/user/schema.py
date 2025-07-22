@@ -1,19 +1,28 @@
 from typing import Optional
 
-from pydantic import EmailStr, Field
+from pydantic import EmailStr, Field, field_validator
 
 from fastapi_zero.core import SchemaBase
+from fastapi_zero.core.security import hash_password
 
 
 class UserCreate(SchemaBase):
     email: EmailStr = Field(..., description="User's email address")
     name: str = Field(..., description="User's name", max_length=50)
     password: str = Field(
-        ..., description="User's password", min_length=8, max_length=50
+        ..., description="User's password", min_length=8, max_length=255
     )
     contact: Optional[str] = Field(
         default=None, description="User's contact number", max_length=14
     )
+
+    @field_validator('password', mode='before')
+    @classmethod
+    def hash(cls, v: str) -> str:
+        try:
+            return hash_password(password=v)
+        except Exception as e:
+            print(e)
 
 
 class UserUpdate(SchemaBase):
@@ -21,11 +30,19 @@ class UserUpdate(SchemaBase):
     email: Optional[EmailStr] = Field(None, description="User's email address")
     name: Optional[str] = Field(None, description="User's name", max_length=50)
     password: Optional[str] = Field(
-        None, description="User's password", min_length=8, max_length=50
+        None, description="User's password", min_length=8, max_length=255
     )
     contact: Optional[str] = Field(
         None, description="User's contact number", max_length=14
     )
+
+    @field_validator('password', mode='before')
+    @classmethod
+    def hash(cls, v: str | None) -> str | None:
+        if v:
+            return hash_password(password=v)
+
+        return None
 
 
 class UserResponse(SchemaBase):

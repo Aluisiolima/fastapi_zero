@@ -19,8 +19,11 @@ ENV PYTHONUNBUFFERED=1
 # Install system update dependencies required for the application.
 RUN apt-get update && \
     apt-get install -y --no-install-recommends \
+    curl \
     build-essential \
     ca-certificates \
+    python3-dev \
+    libffi-dev \
     make \
     && rm -rf /var/lib/apt/lists/*
 
@@ -35,21 +38,6 @@ RUN poetry config virtualenvs.create false
 RUN poetry install --no-interaction --no-ansi
 
 COPY . /app/
-
-# Create a non-privileged user that the app will run under.
-# See https://docs.docker.com/go/dockerfile-user-best-practices/
-ARG UID=10001
-RUN adduser \
-    --disabled-password \
-    --gecos "" \
-    --home "/nonexistent" \
-    --shell "/sbin/nologin" \
-    --no-create-home \
-    --uid "${UID}" \
-    appuser
-
-# Switch to the non-privileged user to run the application.
-USER appuser
 
 # Expose the port that the application listens on.
 EXPOSE 8000
