@@ -1,10 +1,17 @@
 from datetime import UTC, datetime, timedelta
 
+from fastapi import Depends
+from fastapi.security import OAuth2PasswordBearer
 from jwt import decode, encode
 
 from fastapi_zero.core import Settings
 
+from ._exception import exceptions
 
+oauth2_scheme = OAuth2PasswordBearer(tokenUrl='/auth/login')
+
+
+@exceptions
 def encode_to(date: dict) -> str:
     expire = datetime.now(UTC) + timedelta(days=Settings().EXPIRE)
 
@@ -12,10 +19,17 @@ def encode_to(date: dict) -> str:
     return encode(date, Settings().SECRET_KEY, Settings().ALGORITHM)
 
 
-def deconde_to(token: str):
+@exceptions
+def decode_to(token: str) -> dict:
     return decode(
         token,
         Settings().SECRET_KEY,
         algorithms=[Settings().ALGORITHM],
         options={'require': ['exp', 'iat']},
     )
+
+
+def extract_token_header(token: str = Depends(oauth2_scheme)) -> dict:
+    payload: dict = decode_to(token)
+
+    return payload

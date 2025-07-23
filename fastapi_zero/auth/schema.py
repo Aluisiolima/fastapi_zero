@@ -10,4 +10,5 @@ class LoginSchema(SchemaBase):
 
 
 class LoginResponse(SchemaBase):
-    token: str
+    access_token: str
+    token_type: str
