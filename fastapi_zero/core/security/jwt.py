@@ -4,11 +4,17 @@ from fastapi import Depends
 from fastapi.security import OAuth2PasswordBearer
 from jwt import decode, encode
 
-from fastapi_zero.core import Settings
+from fastapi_zero.core import SchemaBase, Settings
 
 from ._exception import exceptions
 
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl='/auth/login')
+
+
+class JWT(SchemaBase):
+    id: int
+    name: str
+    is_adm: bool
 
 
 @exceptions
@@ -20,7 +26,7 @@ def encode_to(date: dict) -> str:
 
 
 @exceptions
-def decode_to(token: str) -> dict:
+def decode_to(token: str) -> JWT:
     return decode(
         token,
         Settings().SECRET_KEY,
@@ -29,7 +35,7 @@ def decode_to(token: str) -> dict:
     )
 
 
-def extract_token_header(token: str = Depends(oauth2_scheme)) -> dict:
-    payload: dict = decode_to(token)
+def extract_token_header(token: str = Depends(oauth2_scheme)) -> JWT:
+    payload: JWT = decode_to(token)
 
-    return payload
+    return JWT(**payload)

@@ -6,6 +6,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 
 from fastapi_zero.core import exceptions
 from fastapi_zero.core.repository import Address, User
+from fastapi_zero.core.security import JWT
 from fastapi_zero.user.schema import (
     UserAddressCreate,
     UserAddressUpdate,
@@ -38,7 +39,13 @@ class UserService:
 
     @staticmethod
     @exceptions
-    async def get_user_by_id(*, id: int, db: AsyncSession) -> User:
+    async def get_user_by_id(*, id: int, db: AsyncSession, token: JWT) -> User:
+        if token.id != id and not token.is_adm:
+            raise HTTPException(
+                status_code=HTTPStatus.FORBIDDEN,
+                detail='Not enough permissions',
+            )
+
         user: User = await db.get(User, id)
 
         return user
@@ -46,8 +53,14 @@ class UserService:
     @staticmethod
     @exceptions
     async def update_user(
-        *, user_update: UserUpdate, db: AsyncSession
+        *, user_update: UserUpdate, db: AsyncSession, token: JWT
     ) -> None:
+        if token.id != user_update.id and not token.is_adm:
+            raise HTTPException(
+                status_code=HTTPStatus.FORBIDDEN,
+                detail='Not enough permissions',
+            )
+
         user_exist: User = await db.get(User, user_update.id)
         if not user_exist:
             raise HTTPException(
@@ -63,7 +76,15 @@ class UserService:
 
     @staticmethod
     @exceptions
-    async def get_user_address(*, id: int, db: AsyncSession) -> list[Address]:
+    async def get_user_address(
+        *, id: int, db: AsyncSession, token: JWT
+    ) -> list[Address]:
+        if token.id != id and not token.is_adm:
+            raise HTTPException(
+                status_code=HTTPStatus.FORBIDDEN,
+                detail='Not enough permissions',
+            )
+
         stmt = select(Address).where(Address.user_id == id)
         addresses: list[Address] = await db.scalars(stmt)
 
@@ -72,8 +93,14 @@ class UserService:
     @staticmethod
     @exceptions
     async def create_address_user(
-        *, address_create: UserAddressCreate, db: AsyncSession
+        *, address_create: UserAddressCreate, db: AsyncSession, token: JWT
     ) -> Address:
+        if token.id != address_create.user_id and not token.is_adm:
+            raise HTTPException(
+                status_code=HTTPStatus.FORBIDDEN,
+                detail='Not enough permissions',
+            )
+
         stmt = select(Address).where(
             and_(
                 Address.user_id == address_create.user_id,
@@ -102,8 +129,17 @@ class UserService:
     @staticmethod
     @exceptions
     async def update_address(
-        *, id: int, address_update: UserAddressUpdate, db: AsyncSession
+        *,
+        id: int,
+        address_update: UserAddressUpdate,
+        db: AsyncSession,
+        token: JWT,
     ) -> None:
+        if token.id != id and not token.is_adm:
+            raise HTTPException(
+                status_code=HTTPStatus.FORBIDDEN,
+                detail='Not enough permissions',
+            )
         address_exist: Address = await db.get(Address, id)
         if not address_exist:
             raise HTTPException(
@@ -120,7 +156,12 @@ class UserService:
 
     @staticmethod
     @exceptions
-    async def delete_address(*, id: int, db: AsyncSession) -> None:
+    async def delete_address(*, id: int, db: AsyncSession, token: JWT) -> None:
+        if token.id != id and not token.is_adm:
+            raise HTTPException(
+                status_code=HTTPStatus.FORBIDDEN,
+                detail='Not enough permissions',
+            )
         address = await db.get(Address, id)
 
         if not address:
